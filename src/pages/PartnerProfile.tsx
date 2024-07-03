@@ -61,164 +61,172 @@ export default function PartnerProfile() {
   useEffect(fetchProfileUserCreatedGames, [isLoading]);
 
   return (
-    <>
-      {!profileUser ? (
-        <Typography fontWeight={"bold"}>Não achamos este usuário...</Typography>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Paper
-            elevation={2}
-            sx={{
-              borderRadius: "0.5rem",
-              alignItems: "left",
-              marginBlock: "6rem",
-              width: "85%",
-              height: "33rem",
-            }}
-          >
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: { xs: "90%", md: "70%" },
+        marginInline: "auto",
+        minHeight: { xs: "85vh", md: "95vh" },
+      }}
+    >
+      <Paper
+        elevation={2}
+        sx={{
+          borderRadius: "0.5rem",
+          marginBlock: "6rem",
+          padding: 2,
+          width: "100%",
+        }}
+      >
+        {!profileUser ? (
+          <Typography fontWeight={"bold"}>
+            Não achamos este usuário...
+          </Typography>
+        ) : (
+          <>
             <Paper
               sx={{
-                width: "69.7rem",
-                height: "15rem",
-                marginTop: "1rem",
-                marginLeft: "1rem",
+                position: "relative",
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: { xs: "column", sm: "row" },
+                width: "100%",
+                alignItems: "center",
+                gap: 2,
+                padding: 2,
               }}
             >
               <Box
                 component={"img"}
                 sx={{
-                  width: "10rem",
-                  height: "10rem",
+                  width: 160,
+                  aspectRatio: 1,
                   borderRadius: "50rem",
-                  marginLeft: "3rem",
-                  marginTop: "2rem",
                 }}
                 src={
                   profileUser.profile_picture
                     ? profileUser.profile_picture
                     : DefaultPFP
                 }
+                loading="lazy"
                 alt=""
               />
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <>
-                  <Box sx={{ display: "flex" }}>
-                    <Typography
-                      sx={{ marginTop: "3rem", marginLeft: "2rem" }}
-                      variant="h1"
-                    >
-                      {profileUser.username}
-                    </Typography>
-                    {isActiveUserProfile && (
-                      <IconButton
-                        size="large"
-                        aria-label="settings"
-                        color="secondary"
-                        href="/settings/profile"
-                        sx={{
-                          height: "2rem",
-                          width: "2rem",
-                          marginTop: "2rem",
-                        }}
-                      >
-                        <SettingsIcon />
-                      </IconButton>
-                    )}
-                  </Box>
-                  <Typography
-                    sx={{ marginTop: "0.1rem", marginLeft: "2rem" }}
-                    variant="subtitle1"
-                  >
-                    {profileUser.email_address}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      marginTop: "1.5rem",
-                      marginLeft: "2rem",
-                      maxWidth: "30rem",
-                      textOverflow: "ellipsis",
-                      display: "inline-block",
-                      overflow: "hidden",
-                    }}
-                    variant="subtitle2"
-                  >
-                    {profileUser.summary}
-                  </Typography>
-                </>
-              </Box>
-            </Paper>
-            <Typography
-              sx={{ marginTop: "1rem", marginLeft: "1rem" }}
-              variant="subtitle1"
-            >
-              Jogos criados por {profileUser.username}:
-            </Typography>
-            <Paper
-              sx={{ height: "12rem", alignItems: "center", display: "flex" }}
-            >
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
-                  gap: "1rem",
-                  width: "97%",
-                  marginLeft: "1rem",
-                  overflow: "scroll",
+                  flexDirection: "column",
+                  alignSelf: { xs: "flex-start", sm: "inherit" },
+                  width: "100%",
                 }}
               >
-                {games?.map((game) => (
-                  <Link key={game.id} to={`/game/${game.title}`}>
-                    <Card
-                      key={game.id}
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h1" component={"p"}>
+                    {profileUser.username}
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    marginTop: 0.1,
+                    wordWrap: "break-word",
+                  }}
+                >
+                  {profileUser.email_address}
+                </Typography>
+                <Typography
+                  sx={{
+                    marginTop: "1.5rem",
+                    marginBottom: 1,
+                    maxWidth: "30rem",
+                    textOverflow: "ellipsis",
+                    display: "inline-block",
+                    overflow: "hidden",
+                  }}
+                  variant="subtitle2"
+                >
+                  {profileUser.summary}
+                </Typography>
+              </Box>
+              {isActiveUserProfile && (
+                <IconButton
+                  size="large"
+                  aria-label="settings"
+                  color="secondary"
+                  href="/settings/profile"
+                  sx={{
+                    position: "absolute",
+                    height: 20,
+                    width: 20,
+                    top: 10,
+                    right: 10,
+                  }}
+                >
+                  <SettingsIcon />
+                </IconButton>
+              )}
+            </Paper>
+            <Typography variant="subtitle1" sx={{ marginTop: "1rem" }}>
+              Jogos criados:
+            </Typography>
+            <Paper
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+                overflow: "scroll",
+                gap: 2,
+                padding: 2,
+              }}
+            >
+              {games?.map((game) => (
+                <Link
+                  key={game.id}
+                  to={`/game/${game.title}`}
+                  style={{
+                    textDecoration: "none",
+                  }}
+                >
+                  <Card
+                    key={game.id}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      backgroundColor: "secondary.main",
+                    }}
+                  >
+                    <Box
+                      component={"img"}
+                      src={game.banner_image}
+                      onError={() => handleImgError(game, "banner_image")}
+                      loading="lazy"
+                      alt=""
+                      style={{ width: "10rem", aspectRatio: "16/9" }}
+                    />
+                    <Box
                       sx={{
-                        textDecoration: "none",
-                        height: "9rem",
-                        backgroundColor: "secondary.main",
-                        marginTop: "1.5rem",
+                        backgroundColor: "secondary.dark",
+                        textAlign: "center",
+                        marginBlock: 1,
                       }}
                     >
-                      <img
-                        src={game.banner_image}
-                        onError={() => handleImgError(game, "banner_image")}
-                        loading="lazy"
-                        alt=""
-                        style={{ width: "12rem", aspectRatio: "16/9" }}
-                      />
-                      <br />
-                      <Box
-                        sx={{
-                          backgroundColor: "secondary.dark",
-                          textAlign: "center",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <Typography sx={{}} variant="subtitle2">
-                          {game.title}
-                        </Typography>
-                      </Box>
-                      <br />
-                    </Card>
-                    <br />
-                  </Link>
-                ))}
-              </Box>
+                      <Typography color={"common.white"} variant="subtitle2">
+                        {game.title}
+                      </Typography>
+                    </Box>
+                  </Card>
+                </Link>
+              ))}
             </Paper>
-          </Paper>
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={isLoading}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        </Box>
-      )}
-    </>
+          </>
+        )}
+      </Paper>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </Box>
   );
 }
