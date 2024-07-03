@@ -203,19 +203,21 @@ export default function PartnerHomeGames({
             }}
             elevation={2}
           >
-            <Box
-              component={"img"}
-              src={game.banner_image}
-              onError={() => handleImgError(game, "banner_image")}
-              alt=""
-              loading="lazy"
-              sx={{
-                width: { xs: 172, sm: "60%" },
-                aspectRatio: 16 / 9,
-                borderRadius: 1,
-                flexShrink: 0,
-              }}
-            />
+            {screenWidth >= 500 && (
+              <Box
+                component={"img"}
+                src={game.banner_image}
+                onError={() => handleImgError(game, "banner_image")}
+                alt=""
+                loading="lazy"
+                sx={{
+                  width: { xs: 172, sm: "60%" },
+                  aspectRatio: 16 / 9,
+                  borderRadius: 1,
+                  flexShrink: 0,
+                }}
+              />
+            )}
             <Box
               sx={{
                 position: "relative",

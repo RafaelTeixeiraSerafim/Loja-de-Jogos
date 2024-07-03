@@ -120,19 +120,21 @@ export default function GameListItem({
         }}
         elevation={2}
       >
-        <Paper
-          component={"img"}
-          src={game.banner_image}
-          onError={() => handleImgError(game, "banner_image")}
-          loading="lazy"
-          sx={{
-            width: { xs: 172, sm: "60%" },
-            aspectRatio: 16 / 9,
-            borderRadius: 1,
-            flexShrink: 0,
-          }}
-          elevation={4}
-        />
+        {screenWidth >= 500 && (
+          <Paper
+            component={"img"}
+            src={game.banner_image}
+            onError={() => handleImgError(game, "banner_image")}
+            loading="lazy"
+            sx={{
+              width: { xs: 172, sm: "60%" },
+              aspectRatio: 16 / 9,
+              borderRadius: 1,
+              flexShrink: 0,
+            }}
+            elevation={4}
+          />
+        )}
         <Box
           sx={{
             display: "flex",
