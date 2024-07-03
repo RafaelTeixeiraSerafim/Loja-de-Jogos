@@ -14,8 +14,7 @@ import {
 interface UserImageInputProps {
   label: string;
   name: string;
-  setUser: React.Dispatch<React.SetStateAction<FormUser>>;
-  user: FormUser;
+  setUser: React.Dispatch<React.SetStateAction<FormUser | null>>;
   defaultImage: string;
   required: boolean;
 }
@@ -59,7 +58,7 @@ export default function UserImageInput({
     };
 
     setUser((prevUser) => ({
-      ...prevUser,
+      ...prevUser!,
       [name]: target.files[0],
     }));
     changeBgImage(target.files[0]);
@@ -94,7 +93,7 @@ export default function UserImageInput({
   const handlePhotoRemove = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     setUser((prevUser) => ({
-      ...prevUser,
+      ...prevUser!,
       [name]: "",
     }));
     setBgImage(null);

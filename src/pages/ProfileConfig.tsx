@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
@@ -19,13 +19,7 @@ import {
 
 export default function ProfileConfig() {
   const { user, loginUser, logoutUser } = useContext(UserContext);
-  const [formUser, setFormUser] = useState<FormUser>({
-    username: user?.username || "",
-    email_address: user?.email_address || "",
-    password: "",
-    profile_picture: user?.profile_picture || "",
-    summary: user?.summary || "",
-  });
+  const [formUser, setFormUser] = useState<FormUser | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogText, setDialogText] = useState("");
@@ -33,6 +27,7 @@ export default function ProfileConfig() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!formUser) return;
 
     const formData = new FormData();
 
@@ -104,6 +99,18 @@ export default function ProfileConfig() {
       });
   };
 
+  useEffect(
+    () =>
+      setFormUser({
+        username: user?.username || "",
+        email_address: user?.email_address || "",
+        password: "",
+        profile_picture: user?.profile_picture || "",
+        summary: user?.summary || "",
+      }),
+    [user?.id]
+  );
+
   return (
     <Box
       sx={{
@@ -115,135 +122,136 @@ export default function ProfileConfig() {
         minHeight: { xs: "80vh", md: "90vh" },
       }}
     >
-      <Paper
-        elevation={2}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 2,
-          width: "100%",
-          maxWidth: 424,
-          height: "fit-content",
-          marginBlock: 6,
-          padding: 3,
-        }}
-      >
-        <Typography
-          variant="h1"
-          sx={{
-            textAlign: "center",
-          }}
-        >
-          OPÇÕES DO USUÁRIO
-        </Typography>
-        <Box
-          component={"form"}
+      {formUser && (
+        <Paper
+          elevation={2}
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            gap: 2,
             width: "100%",
+            maxWidth: 424,
+            height: "fit-content",
+            marginBlock: 6,
+            padding: 3,
           }}
-          onSubmit={onSubmit}
         >
-          <Box
+          <Typography
+            variant="h1"
             sx={{
-              width: "fit-content",
+              textAlign: "center",
             }}
           >
-            <UserImageInput
-              label="Imagem de Perfil"
-              name="profile_picture"
-              setUser={setFormUser}
-              user={formUser}
-              defaultImage={user?.profile_picture || ""}
-              required={false}
-            />
-          </Box>
-          <TextField
-            value={formUser.username}
-            type="text"
-            required
-            onChange={(e) =>
-              setFormUser({
-                ...formUser,
-                username: e.target.value,
-              })
-            }
-            label="Novo Nome:"
-            variant="standard"
-            size="small"
-            sx={{ width: "100%", marginTop: "1rem" }}
-          />
-          <TextField
-            value={formUser.email_address}
-            type="text"
-            required
-            onChange={(e) =>
-              setFormUser({
-                ...formUser,
-                email_address: e.target.value,
-              })
-            }
-            id="email-input"
-            label="Novo E-Mail:"
-            variant="standard"
-            size="small"
-            sx={{ width: "100%", marginTop: "2rem" }}
-          />
-          <TextField
-            value={formUser.password}
-            type="password"
-            onChange={(e) =>
-              setFormUser({
-                ...formUser,
-                password: e.target.value,
-              })
-            }
-            id="password-input"
-            label="Nova Senha:"
-            variant="standard"
-            size="small"
-            sx={{ width: "100%", marginTop: "2rem" }}
-          />
-
-          <TextField
-            variant="outlined"
-            color="secondary"
-            fullWidth
-            value={formUser.summary}
-            onChange={(e) =>
-              setFormUser({ ...formUser, summary: e.target.value })
-            }
-            label="Sobre Você"
-            sx={{ width: "100%", marginTop: "3rem" }}
-          />
+            OPÇÕES DO USUÁRIO
+          </Typography>
           <Box
+            component={"form"}
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
+              flexDirection: "column",
+              alignItems: "center",
               width: "100%",
-              justifyContent: "center",
-              gap: "2rem",
-              marginTop: "2rem",
             }}
+            onSubmit={onSubmit}
           >
-            <Button variant="contained" type="submit">
-              Alterar informações
-            </Button>
-            <Button
-              variant="outlined"
-              type="button"
-              color="error"
-              onClick={() => setShowDeleteDialog(true)}
+            <Box
+              sx={{
+                width: "fit-content",
+              }}
             >
-              {" "}
-              Excluir Conta{" "}
-            </Button>
+              <UserImageInput
+                label="Imagem de Perfil"
+                name="profile_picture"
+                setUser={setFormUser}
+                defaultImage={user?.profile_picture || ""}
+                required={false}
+              />
+            </Box>
+            <TextField
+              value={formUser.username}
+              type="text"
+              required
+              onChange={(e) =>
+                setFormUser({
+                  ...formUser,
+                  username: e.target.value,
+                })
+              }
+              label="Novo Nome:"
+              variant="standard"
+              size="small"
+              sx={{ width: "100%", marginTop: "1rem" }}
+            />
+            <TextField
+              value={formUser.email_address}
+              type="text"
+              required
+              onChange={(e) =>
+                setFormUser({
+                  ...formUser,
+                  email_address: e.target.value,
+                })
+              }
+              id="email-input"
+              label="Novo E-Mail:"
+              variant="standard"
+              size="small"
+              sx={{ width: "100%", marginTop: "2rem" }}
+            />
+            <TextField
+              value={formUser.password}
+              type="password"
+              onChange={(e) =>
+                setFormUser({
+                  ...formUser,
+                  password: e.target.value,
+                })
+              }
+              id="password-input"
+              label="Nova Senha:"
+              variant="standard"
+              size="small"
+              sx={{ width: "100%", marginTop: "2rem" }}
+            />
+
+            <TextField
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              value={formUser.summary}
+              onChange={(e) =>
+                setFormUser({ ...formUser, summary: e.target.value })
+              }
+              label="Sobre Você"
+              sx={{ width: "100%", marginTop: "3rem" }}
+            />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                width: "100%",
+                justifyContent: "center",
+                gap: "2rem",
+                marginTop: "2rem",
+              }}
+            >
+              <Button variant="contained" type="submit">
+                Alterar informações
+              </Button>
+              <Button
+                variant="outlined"
+                type="button"
+                color="error"
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                {" "}
+                Excluir Conta{" "}
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Paper>
+        </Paper>
+      )}
       <Dialog
         open={showDialog}
         onClose={() => setShowDialog(false)}
