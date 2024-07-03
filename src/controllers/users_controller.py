@@ -41,6 +41,15 @@ def patch_user_controller(app, user: User):
                 
             upload_blob_from_memory("fgs-data", profile_pic.read(), blob_name)
             user.profile_picture = blob_name
+        else:
+            profile_pic = request.form.get('profile_picture')
+            if not profile_pic and user.profile_picture:
+                try:
+                    delete_blob('fgs-data', user.profile_picture)
+                except Exception as e:
+                    print(e)
+                
+                user.profile_picture = ""
 
         user.username = request.form.get('username', user.username)
         
