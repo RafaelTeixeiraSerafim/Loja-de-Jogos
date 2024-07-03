@@ -193,6 +193,7 @@ export default function UserProfile() {
                 overflow: "scroll",
                 gap: 2,
                 padding: 2,
+                minHeight: 120,
               }}
             >
               {games?.map((game) => (
@@ -256,6 +257,7 @@ export default function UserProfile() {
             bottom: "3vh",
             left: "50%",
             transform: "translate(-50%)",
+            zIndex: 10,
           }}
         >
           {state.alert}

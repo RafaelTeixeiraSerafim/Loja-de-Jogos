@@ -64,7 +64,7 @@ export interface FormUser {
 
 export interface UserContextInterface {
   user: User | null;
-  getUser: () => Promise<{ user: User, token: string }>;
+  getUser: () => Promise<{ user: User; token: string }>;
   logoutUser: () => void;
   loginUser: (newToken: string, user: User) => void;
 }
@@ -106,18 +106,18 @@ export interface BoughtGame {
 }
 
 export interface GameAverage {
-  title: string,
-  avg: number,
-  num_of_reviews: number
+  title: string;
+  avg: number;
+  num_of_reviews: number;
 }
 
 export interface Genre {
-  id: number,
-  name: string,
-  created_at: string
+  id: number;
+  name: string;
+  created_at: string;
 }
 
 export interface GameGenre {
-  title: string,
-  genres: Genre[]
+  title: string;
+  genres: Genre[];
 }

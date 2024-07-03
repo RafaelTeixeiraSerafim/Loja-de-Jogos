@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
@@ -20,11 +20,11 @@ import {
 export default function ProfileConfig() {
   const { user, loginUser, logoutUser } = useContext(UserContext);
   const [formUser, setFormUser] = useState<FormUser>({
-    username: "",
-    email_address: "",
+    username: user?.username || "",
+    email_address: user?.email_address || "",
     password: "",
-    profile_picture: "",
-    summary: "",
+    profile_picture: user?.profile_picture || "",
+    summary: user?.summary || "",
   });
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -41,10 +41,8 @@ export default function ProfileConfig() {
       formData.append("email_address", formUser.email_address);
     if (formUser.password) formData.append("password", formUser.password);
     if (formUser.summary) formData.append("summary", formUser.summary);
-
-    if (formUser.profile_picture && formUser.profile_picture instanceof File) {
+    if (formUser.profile_picture)
       formData.append("profile_picture", formUser.profile_picture);
-    }
 
     const config = {
       headers: {
@@ -106,18 +104,6 @@ export default function ProfileConfig() {
       });
   };
 
-  useEffect(
-    () =>
-      setFormUser({
-        username: user?.username || "",
-        email_address: user?.email_address || "",
-        password: "",
-        profile_picture: "",
-        summary: user?.summary || "",
-      }),
-    [user?.id]
-  );
-
   return (
     <Box
       sx={{
@@ -166,16 +152,14 @@ export default function ProfileConfig() {
               width: "fit-content",
             }}
           >
-            {user?.profile_picture && (
-              <UserImageInput
-                label="Imagem de Perfil"
-                name="profile_picture"
-                setUser={setFormUser}
-                user={formUser}
-                defaultImage={user.profile_picture || ""}
-                required={false}
-              />
-            )}
+            <UserImageInput
+              label="Imagem de Perfil"
+              name="profile_picture"
+              setUser={setFormUser}
+              user={formUser}
+              defaultImage={user?.profile_picture || ""}
+              required={false}
+            />
           </Box>
           <TextField
             value={formUser.username}

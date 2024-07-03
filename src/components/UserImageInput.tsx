@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from "react"
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import { FormUser } from "../types/types"
-import { Avatar, InputLabel, alpha, styled } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import { FormUser } from "../types/types";
+import {
+  Avatar,
+  InputLabel,
+  Menu,
+  MenuItem,
+  TextField,
+  alpha,
+  styled,
+} from "@mui/material";
 
 interface UserImageInputProps {
-    label: string,
-    name: string,
-    setUser: React.Dispatch<React.SetStateAction<FormUser>>,
-    user: FormUser,
-    defaultImage: string,
-    required: boolean
+  label: string;
+  name: string;
+  setUser: React.Dispatch<React.SetStateAction<FormUser>>;
+  user: FormUser;
+  defaultImage: string;
+  required: boolean;
 }
 
 const StyledImageInput = styled(InputLabel)(({ theme }) => ({
@@ -32,38 +40,109 @@ const StyledImageInput = styled(InputLabel)(({ theme }) => ({
   },
 }));
 
-export default function UserImageInput({ label, name, setUser, defaultImage, required }: UserImageInputProps) {
-    const [bgImage, setBgImage] = useState<string | ArrayBuffer | null>(null)
-    
-    const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
-        const target = e.target as HTMLInputElement & {
-            files: FileList
-        }
+export default function UserImageInput({
+  label,
+  name,
+  setUser,
+  defaultImage,
+  required,
+}: UserImageInputProps) {
+  const [bgImage, setBgImage] = useState<string | ArrayBuffer | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-        setUser((prevUser) => ({
-          ...prevUser,
-          [name]: target.files[0],
-        }));
-        changeBgImage(target.files[0])
-    }
+  const isMenuOpen = Boolean(anchorEl);
 
-    const changeBgImage = (image: File | undefined) => {
-        if (!image) return
+  const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement & {
+      files: FileList;
+    };
 
-        const reader = new FileReader();
-        
-        reader.onload = () => {
-            setBgImage(reader.result)
-        }
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: target.files[0],
+    }));
+    changeBgImage(target.files[0]);
+    setAnchorEl(null);
+  };
 
-        reader.readAsDataURL(image)
-    }
+  const changeBgImage = (image: File | undefined) => {
+    if (!image) return;
 
-    useEffect(() => setBgImage(defaultImage), [])
+    const reader = new FileReader();
 
-    return (
-      <>
-      <StyledImageInput>
+    reader.onload = () => {
+      setBgImage(reader.result);
+    };
+
+    reader.readAsDataURL(image);
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+  };
+
+  const handleMenuItemClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handlePhotoRemove = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: "",
+    }));
+    setBgImage(null);
+    setAnchorEl(null);
+  };
+
+  const menuId = "primary-search-account-menu";
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuItemClick} key={"btnUploadPhoto"}>
+        Nova Foto
+        <TextField
+          type="file"
+          name={name}
+          required={required}
+          inputRef={fileInputRef}
+          inputProps={{
+            accept: "image/*",
+            onChange: handleOnChange,
+          }}
+          sx={{
+            display: "none",
+          }}
+        />
+      </MenuItem>
+      <MenuItem onClick={handlePhotoRemove}>Remover Foto</MenuItem>
+    </Menu>
+  );
+
+  useEffect(() => setBgImage(defaultImage), []);
+
+  return (
+    <>
+      <StyledImageInput onClick={handleMenuOpen}>
         <InputLabel
           sx={{
             position: "absolute",
@@ -81,7 +160,7 @@ export default function UserImageInput({ label, name, setUser, defaultImage, req
             onError={() => console.log("Erro na profile picture")}
             sx={{
               width: "8rem",
-              height: "8rem"
+              height: "8rem",
             }}
           />
         ) : (
@@ -92,15 +171,8 @@ export default function UserImageInput({ label, name, setUser, defaultImage, req
             }}
           />
         )}
-        <input
-          type="file"
-          name={name}
-          hidden
-          accept="image/*"
-          required={required}
-          onChange={handleOnChange}
-        />
+        {renderMenu}
       </StyledImageInput>
-        </>
-    )
+    </>
+  );
 }

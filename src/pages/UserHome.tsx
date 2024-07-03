@@ -310,6 +310,7 @@ export default function UserHome() {
             bottom: "3vh",
             left: "50%",
             transform: "translate(-50%)",
+            zIndex: 10,
           }}
         >
           {state.alert}

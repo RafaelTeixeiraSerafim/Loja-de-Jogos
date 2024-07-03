@@ -177,6 +177,7 @@ export default function PartnerProfile() {
                 overflow: "scroll",
                 gap: 2,
                 padding: 2,
+                minHeight: 120,
               }}
             >
               {games?.map((game) => (

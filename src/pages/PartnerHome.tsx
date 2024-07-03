@@ -84,10 +84,7 @@ export default function PartnerHome() {
           )}
         </>
       ) : (
-        <PartnerHomeGames
-          games={games}
-          setGames={setGames}
-        />
+        <PartnerHomeGames games={games} setGames={setGames} />
       )}
       <Button
         href="/partner/new-game"
@@ -113,6 +110,7 @@ export default function PartnerHome() {
             bottom: "3vh",
             left: "50%",
             transform: "translate(-50%)",
+            zIndex: 10,
           }}
         >
           {state.alert}

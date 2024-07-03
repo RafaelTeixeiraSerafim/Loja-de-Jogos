@@ -8,7 +8,7 @@ interface RoutesWrapperProps {
 }
 
 export default function RoutesWrapper({ children }: RoutesWrapperProps) {
-  const { getUser, loginUser, logoutUser } = useContext(UserContext);
+  const { getUser, loginUser, logoutUser, user } = useContext(UserContext);
 
   const authenticate = () => {
     getUser().then(({ user, token }) => {
@@ -20,7 +20,7 @@ export default function RoutesWrapper({ children }: RoutesWrapperProps) {
     });
   };
 
-  useEffect(authenticate, []);
+  useEffect(authenticate, [user?.updated_at]);
 
   return (
     <Suspense fallback={<LoadingFallback />}>
