@@ -119,27 +119,45 @@ export default function ProfileConfig() {
   );
 
   return (
-    <Box sx={{ marginTop: "10rem", display: "flex", justifyContent: "center" }}>
+    <Box
+      sx={{
+        marginTop: 6,
+        display: "flex",
+        justifyContent: "center",
+        width: "85%",
+        marginInline: "auto",
+        minHeight: { xs: "80vh", md: "90vh" },
+      }}
+    >
       <Paper
         elevation={2}
         sx={{
-          width: "40%",
-          height: "45rem",
           display: "flex",
-          marginBottom: 5,
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
+          gap: 2,
+          width: "100%",
+          maxWidth: 424,
+          height: "fit-content",
+          marginBlock: 6,
+          padding: 3,
         }}
       >
-        <Typography variant="h1">OPÇÕES DO USUÁRIO</Typography>
+        <Typography
+          variant="h1"
+          sx={{
+            textAlign: "center",
+          }}
+        >
+          OPÇÕES DO USUÁRIO
+        </Typography>
         <Box
           component={"form"}
           sx={{
             display: "flex",
             flexDirection: "column",
-            marginTop: "1rem",
             alignItems: "center",
+            width: "100%",
           }}
           onSubmit={onSubmit}
         >
@@ -148,14 +166,16 @@ export default function ProfileConfig() {
               width: "fit-content",
             }}
           >
-            <UserImageInput
-              label="Imagem de Perfil"
-              name="profile_picture"
-              setUser={setFormUser}
-              user={formUser}
-              defaultImage={user?.profile_picture || ""}
-              required={false}
-            />
+            {user?.profile_picture && (
+              <UserImageInput
+                label="Imagem de Perfil"
+                name="profile_picture"
+                setUser={setFormUser}
+                user={formUser}
+                defaultImage={user.profile_picture || ""}
+                required={false}
+              />
+            )}
           </Box>
           <TextField
             value={formUser.username}
@@ -170,7 +190,7 @@ export default function ProfileConfig() {
             label="Novo Nome:"
             variant="standard"
             size="small"
-            sx={{ width: 350, marginTop: "1rem" }}
+            sx={{ width: "100%", marginTop: "1rem" }}
           />
           <TextField
             value={formUser.email_address}
@@ -186,7 +206,7 @@ export default function ProfileConfig() {
             label="Novo E-Mail:"
             variant="standard"
             size="small"
-            sx={{ width: 350, marginTop: "2rem" }}
+            sx={{ width: "100%", marginTop: "2rem" }}
           />
           <TextField
             value={formUser.password}
@@ -201,7 +221,7 @@ export default function ProfileConfig() {
             label="Nova Senha:"
             variant="standard"
             size="small"
-            sx={{ width: 350, marginTop: "2rem" }}
+            sx={{ width: "100%", marginTop: "2rem" }}
           />
 
           <TextField
@@ -213,13 +233,13 @@ export default function ProfileConfig() {
               setFormUser({ ...formUser, summary: e.target.value })
             }
             label="Sobre Você"
-            sx={{ width: "22rem", marginTop: "3rem" }}
+            sx={{ width: "100%", marginTop: "3rem" }}
           />
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
-              width: "22rem",
+              flexDirection: { xs: "column", sm: "row" },
+              width: "100%",
               justifyContent: "center",
               gap: "2rem",
               marginTop: "2rem",
