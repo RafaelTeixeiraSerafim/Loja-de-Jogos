@@ -115,7 +115,7 @@ export default function UserLayout() {
       <MenuItem
         onClick={() => {
           handleMenuClose();
-          logoutUser()
+          logoutUser();
           navigate(`/`);
         }}
         key={"btnLogout"}
@@ -131,13 +131,22 @@ export default function UserLayout() {
     <>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="fixed">
-          <Toolbar sx={{ width: "70%", margin: "auto", padding: { md: 0 } }}>
+          <Toolbar
+            sx={{
+              display: { xs: "flex" },
+              justifyContent: "space-between",
+              width: { xs: "95%", md: "70%" },
+              margin: "auto",
+              padding: { md: 0 },
+              paddingBlock: { xs: 0.5, sm: 0 },
+            }}
+          >
             <Link to={"/"}>
               <HeaderLogo />
             </Link>
             <SearchBar games={games} />
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+            <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 1 }}>
               <IconButton
                 size="large"
                 edge="end"
@@ -164,7 +173,10 @@ export default function UserLayout() {
                 color="inherit"
               >
                 {user?.profile_picture ? (
-                  <Avatar src={user?.profile_picture} />
+                  <Avatar
+                    src={user.profile_picture}
+                    slotProps={{ img: { loading: "lazy" } }}
+                  />
                 ) : (
                   <AccountCircle />
                 )}

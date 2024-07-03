@@ -12,7 +12,6 @@ import { Avatar } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { ThemeContext } from "../contexts/ThemeContext";
-// import HeaderLogo from "../components/HeaderLogo";
 import LogoLong from "../assets/images/Logo_Long.png";
 import LoginMobileMenu from "../components/LoginMobileMenu";
 
@@ -103,7 +102,7 @@ export default function LoginLayout() {
               />
             </Link>
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+            <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 1 }}>
               <IconButton
                 size="large"
                 edge="end"
