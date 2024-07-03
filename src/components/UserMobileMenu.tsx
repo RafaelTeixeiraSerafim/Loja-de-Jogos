@@ -9,6 +9,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FolderIcon from "@mui/icons-material/Folder";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { useNavigate } from "react-router-dom";
 
 interface UserMobileMenuProps {
   mobileMoreAnchorEl: HTMLElement | null;
@@ -30,6 +31,7 @@ export default function UserMobileMenu({
   const { darkMode, toggleTheme } = useContext(ThemeContext);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const mobileMenuId = "primary-search-account-menu-mobile";
+  const navigate = useNavigate();
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -57,6 +59,10 @@ export default function UserMobileMenu({
           gap: 1,
           paddingInline: 3,
         }}
+        onClick={() => {
+          handleMobileMenuClose();
+          navigate("/wishlist")
+        }}
       >
         {/* Notificações */}
         {/* <Badge badgeContent={4} color="error">
@@ -70,6 +76,10 @@ export default function UserMobileMenu({
           gap: 1,
           paddingInline: 3,
         }}
+        onClick={() => {
+          handleMobileMenuClose();
+          navigate("/cart")
+        }}
       >
         {/* Notificações */}
         {/* <Badge badgeContent={17} color="error">
@@ -82,6 +92,10 @@ export default function UserMobileMenu({
           display: "flex",
           gap: 1,
           paddingInline: 3,
+        }}
+        onClick={() => {
+          handleMobileMenuClose();
+          navigate("/library")
         }}
       >
         {/* Notificações */}
