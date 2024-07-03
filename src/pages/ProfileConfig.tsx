@@ -160,13 +160,15 @@ export default function ProfileConfig() {
                 width: "fit-content",
               }}
             >
-              <UserImageInput
-                label="Imagem de Perfil"
-                name="profile_picture"
-                setUser={setFormUser}
-                defaultImage={user?.profile_picture || ""}
-                required={false}
-              />
+              {user?.profile_picture !== undefined && (
+                <UserImageInput
+                  label="Imagem de Perfil"
+                  name="profile_picture"
+                  setUser={setFormUser}
+                  defaultImage={user.profile_picture}
+                  required={false}
+                />
+              )}
             </Box>
             <TextField
               value={formUser.username}

@@ -47,10 +47,13 @@ export default function UserImageInput({
   required,
 }: UserImageInputProps) {
   const [bgImage, setBgImage] = useState<string | ArrayBuffer | null>(null);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuPosition, setMenuPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const isMenuOpen = Boolean(anchorEl);
+  const isMenuOpen = Boolean(menuPosition);
 
   const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement & {
@@ -62,7 +65,7 @@ export default function UserImageInput({
       [name]: target.files[0],
     }));
     changeBgImage(target.files[0]);
-    setAnchorEl(null);
+    setMenuPosition(null);
   };
 
   const changeBgImage = (image: File | undefined) => {
@@ -78,15 +81,19 @@ export default function UserImageInput({
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setMenuPosition({
+      top: event.clientY,
+      left: event.clientX,
+    });
   };
 
   const handleMenuClose = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    setAnchorEl(null);
+    setMenuPosition(null);
   };
 
-  const handleMenuItemClick = () => {
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     fileInputRef.current?.click();
   };
 
@@ -97,23 +104,16 @@ export default function UserImageInput({
       [name]: "",
     }));
     setBgImage(null);
-    setAnchorEl(null);
+    setMenuPosition(null);
   };
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      anchorReference="anchorPosition"
+      anchorPosition={menuPosition!}
       id={menuId}
       keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
