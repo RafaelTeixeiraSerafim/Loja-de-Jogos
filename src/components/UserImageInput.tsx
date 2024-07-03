@@ -137,7 +137,7 @@ export default function UserImageInput({
     </Menu>
   );
 
-  useEffect(() => setBgImage(defaultImage), []);
+  useEffect(() => setBgImage(defaultImage), [defaultImage]);
 
   return (
     <>
@@ -155,7 +155,7 @@ export default function UserImageInput({
         </InputLabel>
         {bgImage ? (
           <Avatar
-            src={bgImage ? (bgImage as string) : ""}
+            src={bgImage as string}
             onError={() => console.log("Erro na profile picture")}
             sx={{
               width: "8rem",
