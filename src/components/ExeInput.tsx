@@ -28,7 +28,7 @@ interface ExeInputProps {
 const StyledExeInput = styled(InputLabel)(({ theme }) => ({
   position: "relative",
   overflow: "visible",
-  marginTop: 20,
+  marginTop: 15,
   border: "1px solid",
   borderColor:
     theme.palette.mode === "dark" ? alpha("#fff", 0.2) : alpha("#000", 0.2),

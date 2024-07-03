@@ -31,12 +31,13 @@ export default function UpdateGame() {
   return (
     <Box
       sx={{
-        width: "70%",
-        marginInline: "auto",
         display: "flex",
         flexDirection: "column",
+        width: { xs: "90%", md: "70%" },
+        marginInline: "auto",
         marginBlock: 5,
         marginTop: 12,
+        minHeight: "90vh",
       }}
     >
       <GameForm existingGame={game} key={game.id} />

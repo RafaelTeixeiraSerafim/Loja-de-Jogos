@@ -12,6 +12,14 @@ interface GameImageInputProps {
   game: SimpleGame;
   required: boolean;
   showRequired?: boolean;
+  setCarouselThumbImages?: React.Dispatch<
+    React.SetStateAction<
+      React.ReactElement<
+        unknown,
+        string | React.JSXElementConstructor<unknown>
+      >[]
+    >
+  >;
 }
 
 const StyledImageInput = styled(InputLabel)(({ theme }) => ({
@@ -40,6 +48,7 @@ export default function GameImageInput({
   game,
   required,
   showRequired,
+  setCarouselThumbImages,
 }: GameImageInputProps) {
   const [bgImage, setBgImage] = useState<string | ArrayBuffer | null>(null);
 
@@ -64,11 +73,39 @@ export default function GameImageInput({
 
     reader.onload = () => {
       setBgImage(reader.result);
+      setCarouselThumbImages?.((prevImgs) => {
+        const imgs = [...prevImgs];
+        imgs[parseInt(name.charAt(name.length - 1)) - 1] = (
+          <div
+            key={name}
+            style={{
+              display: "flex",
+              width: "100%",
+              aspectRatio: "16 / 9",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {reader.result ? (
+              <img
+                src={reader.result as string}
+                onError={() => handleImgError(name)}
+                loading="lazy"
+                height={"100%"}
+              />
+            ) : (
+              <AddPhotoAlternateIcon fontSize="small" />
+            )}
+          </div>
+        );
+        console.log(imgs[parseInt(name.charAt(name.length - 1)) - 1]);
+        return imgs;
+      });
     };
 
     reader.readAsDataURL(image);
   };
-  
+
   // const handleImgError = (fieldName: string) => {
   //   axiosInstance
   //     .get(`/api/games?game_title=${game.title}&&field_name=${fieldName}`)

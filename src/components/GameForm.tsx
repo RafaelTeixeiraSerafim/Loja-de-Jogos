@@ -31,7 +31,7 @@ export default function GameForm({ existingGame }: GameFormProps) {
   const { user, logoutUser } = useContext(UserContext);
   const [game, setGame] = useState<SimpleGame>({
     id: existingGame.id || 0,
-    creator_id: parseInt(user.id),
+    creator_id: parseInt(user?.id || "0"),
     publisher: existingGame.publisher || "",
     developer: existingGame.developer || "",
     title: existingGame.title || "",
@@ -185,18 +185,6 @@ export default function GameForm({ existingGame }: GameFormProps) {
       });
   };
 
-  // const handleImgError = (fieldName: string) => {
-  //   axiosInstance
-  //     .get(`/api/games?game_title=${game.title}&&field_name=${fieldName}`)
-  //     .then((response) => {
-  //       setGame({ ...game, [fieldName]: response.data.url });
-  //       console.log(response);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
   const handleImgError = async (fieldName: string) => {
     const url = await handleNewImageUrl(game, fieldName);
     setGame({ ...game, [fieldName]: url });
@@ -223,6 +211,7 @@ export default function GameForm({ existingGame }: GameFormProps) {
               game={game}
               setGame={setGame}
               required={false}
+              setCarouselThumbImages={setCarouselThumbImages}
             />
           </div>
         );
@@ -243,6 +232,7 @@ export default function GameForm({ existingGame }: GameFormProps) {
                 src={value}
                 onError={() => handleImgError(key)}
                 loading="lazy"
+                height={"100%"}
               />
             ) : (
               <AddPhotoAlternateIcon fontSize="small" />
@@ -262,7 +252,7 @@ export default function GameForm({ existingGame }: GameFormProps) {
 
   return (
     <>
-      <form onSubmit={onSubmit} encType="multipart/form-data">
+      <Box component={"form"} onSubmit={onSubmit} encType="multipart/form-data">
         <TextField
           label={"Título:"}
           sx={{
@@ -278,12 +268,13 @@ export default function GameForm({ existingGame }: GameFormProps) {
         <Box
           sx={{
             display: "flex",
+            flexDirection: { xs: "column-reverse", lg: "row" },
             gap: 3,
           }}
         >
           <Box
             sx={{
-              width: "70%",
+              width: { xs: "100%", lg: "70%" },
             }}
           >
             <Carousel
@@ -293,7 +284,7 @@ export default function GameForm({ existingGame }: GameFormProps) {
               thumbWidth={120}
               width={"99.99%"}
               renderThumbs={() => carouselThumbImages}
-              showThumbs={false}
+              // showThumbs={false}
             >
               {carouselImages}
             </Carousel>
@@ -302,8 +293,8 @@ export default function GameForm({ existingGame }: GameFormProps) {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 2,
-              width: "30%",
+              gap: 3,
+              width: { xs: "100%", lg: "30%" },
             }}
           >
             <GameImageInput
@@ -433,7 +424,7 @@ export default function GameForm({ existingGame }: GameFormProps) {
         >
           {isUpdating ? "Alterar" : "Publicar"} Jogo
         </Button>
-      </form>
+      </Box>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}
