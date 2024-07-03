@@ -86,7 +86,7 @@ export default function LoginMobileMenu({
 
   return (
     <>
-      <Box sx={{ display: { xs: "flex", md: "none" } }}>
+      <Box sx={{ display: { xs: "flex", sm: "none" } }}>
         <IconButton
           size="large"
           aria-label="show more"

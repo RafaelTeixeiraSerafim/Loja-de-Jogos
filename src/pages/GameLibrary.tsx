@@ -1,4 +1,4 @@
-import LibraryGameList from "../components/LibraryGameList";
+import LibraryGames from "../components/LibraryGames";
 import { Box, Typography } from "@mui/material";
 
 export default function GameLibrary() {
@@ -7,9 +7,9 @@ export default function GameLibrary() {
       sx={{
         marginBlock: 5,
         marginTop: 15,
-        width: "70%",
+        width: { xs: "90%", md: "70%" },
         marginInline: "auto",
-        minHeight: "90vh",
+        minHeight: { xs: "80vh", md: "90vh" },
       }}
     >
       <Typography
@@ -20,7 +20,7 @@ export default function GameLibrary() {
       >
         Biblioteca
       </Typography>
-      <LibraryGameList />
+      <LibraryGames />
     </Box>
   );
 }

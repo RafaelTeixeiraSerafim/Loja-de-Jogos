@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { OriginalGame } from "../types/types.tsx";
-import PartnerHomeGameList from "../components/PartnerHomeGameList.tsx";
+import PartnerHomeGames from "../components/PartnerHomeGames.tsx";
 import axiosInstance from "../utils/axiosInstance.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext.tsx";
@@ -60,10 +60,11 @@ export default function PartnerHome() {
   return (
     <Box
       sx={{
-        width: "70%",
+        width: { xs: "90%", md: "70%" },
         marginInline: "auto",
         marginBlock: 5,
         marginTop: 15,
+        minHeight: { xs: "80vh", md: "90vh" },
       }}
     >
       <Typography
@@ -83,10 +84,9 @@ export default function PartnerHome() {
           )}
         </>
       ) : (
-        <PartnerHomeGameList
+        <PartnerHomeGames
           games={games}
           setGames={setGames}
-          updateCallback={fetchPartnerGames}
         />
       )}
       <Button

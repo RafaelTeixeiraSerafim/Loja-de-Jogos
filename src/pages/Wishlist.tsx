@@ -8,9 +8,9 @@ export default function Wishlist() {
       sx={{
         marginBlock: 5,
         marginTop: 15,
-        width: "70%",
+        width: { xs: "90%", md: "70%" },
         marginInline: "auto",
-        minHeight: "90vh",
+        minHeight: { xs: "80vh", md: "90vh" },
       }}
     >
       <Typography

@@ -19,6 +19,7 @@ export default function Footer() {
       <Box
         component="img"
         sx={{
+          width: "100%",
           maxWidth: 300,
           filter: "drop-shadow(0px 0px 2px #222)",
         }}

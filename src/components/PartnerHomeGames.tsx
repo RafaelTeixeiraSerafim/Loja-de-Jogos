@@ -20,17 +20,15 @@ import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import { handleNewImageUrl } from "../funcs/async/ImgFunctions";
 
-export interface PartnerHomeGameListProps {
+export interface PartnerHomeGamesProps {
   games: OriginalGame[];
   setGames: (games: React.SetStateAction<OriginalGame[]>) => void;
-  updateCallback: () => void;
 }
 
-export default function PartnerHomeGameList({
+export default function PartnerHomeGames({
   games,
   setGames,
-  updateCallback,
-}: PartnerHomeGameListProps) {
+}: PartnerHomeGamesProps) {
   const [gameMoreAnchorEl, setGameMoreAnchorEl] = useState<null | HTMLElement>(
     null
   );
@@ -40,13 +38,14 @@ export default function PartnerHomeGameList({
   const [showDialog, setShowDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [dialogText, setDialogText] = useState("");
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const { user, logoutUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const isGameMenuOpen = Boolean(gameMoreAnchorEl);
 
   const getGamesAverage = () => {
-    if (!user.id) return;
+    if (!user?.id) return;
 
     axiosInstance
       .get(`/api/reviews?creator_id=${user.id}`)
@@ -95,7 +94,7 @@ export default function PartnerHomeGameList({
   };
 
   const getPartnerGenres = () => {
-    if (!user.id) return;
+    if (!user?.id) return;
 
     axiosInstance
       .get(`/api/genres?creator_id=${user.id}`)
@@ -126,24 +125,6 @@ export default function PartnerHomeGameList({
     setGameMoreAnchorEl(null);
     setSelectedGame(null);
   };
-
-  // const handleImgError = (game: OriginalGame, fieldName: string) => {
-  //   axiosInstance
-  //     .get(`/api/games?game_title=${game.title}&&field_name=${fieldName}`)
-  //     .then((response) => {
-  //       setGames(
-  //         games.map((oldGame) =>
-  //           oldGame.id === game.id
-  //             ? { ...game, [fieldName]: response.data.url }
-  //             : oldGame
-  //         )
-  //       );
-  //       console.log(response);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
 
   const handleImgError = async (game: OriginalGame, fieldName: string) => {
     await handleNewImageUrl(game, fieldName, setGames);
@@ -182,6 +163,18 @@ export default function PartnerHomeGameList({
 
   useEffect(getGamesAverage, []);
   useEffect(getPartnerGenres, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <Box
@@ -203,6 +196,7 @@ export default function PartnerHomeGameList({
           <Card
             key={game.id}
             sx={{
+              position: "relative",
               display: "flex",
               gap: 3,
               padding: 2,
@@ -211,14 +205,15 @@ export default function PartnerHomeGameList({
           >
             <Box
               component={"img"}
-              src={game.banner_image ? game.banner_image : ""}
+              src={game.banner_image}
               onError={() => handleImgError(game, "banner_image")}
               alt=""
               loading="lazy"
               sx={{
-                width: "60%",
+                width: { xs: 172, sm: "60%" },
                 aspectRatio: 16 / 9,
                 borderRadius: 1,
+                flexShrink: 0,
               }}
             />
             <Box
@@ -228,7 +223,7 @@ export default function PartnerHomeGameList({
                 flexDirection: "column",
                 flexGrow: 1,
                 justifyContent: "space-between",
-                width: "40%",
+                width: { xs: "100%", sm: "40%" },
               }}
             >
               <Box>
@@ -244,10 +239,11 @@ export default function PartnerHomeGameList({
                       .find(({ title }) => title === game.title)
                       ?.avg.toPrecision(2) + " "}
                     <Rating
-                      value={
-                        parseFloat(gamesAverage.find(({ title }) => title === game.title)
-                          ?.avg.toPrecision(1) || "0")
-                      }
+                      value={parseFloat(
+                        gamesAverage
+                          .find(({ title }) => title === game.title)
+                          ?.avg.toPrecision(1) || "0"
+                      )}
                       readOnly
                       precision={0.1}
                       size="small"
@@ -264,39 +260,52 @@ export default function PartnerHomeGameList({
                     )
                   </Typography>
                 )}
-                <Typography>{game.summary}</Typography>
+                {screenWidth >= 600 && (
+                  <Typography
+                    sx={{
+                      marginBlock: 1,
+                    }}
+                  >
+                    {game.summary.length >= 190
+                      ? game.summary.substring(0, 186) + "..."
+                      : game.summary}
+                  </Typography>
+                )}
               </Box>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                   gap: 0.6,
+                  marginTop: 1,
                 }}
               >
-                <Typography variant="h2" component="p">
+                <Typography variant="h2" component="p" color={"primary"}>
                   R${game.price.toFixed(2)}
                 </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1,
-                  }}
-                >
-                  {partnerGenres
-                    .find(
-                      ({ title, genres }) =>
-                        game.title === title && genres.length > 0
-                    )
-                    ?.genres.map((genre, index) => (
-                      <Chip
-                        key={index}
-                        label={genre.name}
-                        size="small"
-                        variant="outlined"
-                        color="secondary"
-                      />
-                    ))}
-                </Box>
+                {screenWidth >= 750 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                    }}
+                  >
+                    {partnerGenres
+                      .find(
+                        ({ title, genres }) =>
+                          game.title === title && genres.length > 0
+                      )
+                      ?.genres.map((genre, index) => (
+                        <Chip
+                          key={index}
+                          label={genre.name}
+                          size="small"
+                          variant="outlined"
+                          color="secondary"
+                        />
+                      ))}
+                  </Box>
+                )}
               </Box>
               <IconButton
                 size="large"
@@ -306,8 +315,8 @@ export default function PartnerHomeGameList({
                 onClick={(e) => handleGameMenuOpen(e, game)}
                 sx={{
                   position: "absolute",
-                  top: -10,
-                  right: -10,
+                  top: -12,
+                  right: -12,
                 }}
               >
                 <MoreIcon />

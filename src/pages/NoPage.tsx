@@ -4,9 +4,10 @@ export default function NoPage() {
   return (
     <Box
       sx={{
-        width: "70%",
+        width: { xs: "90%", sm: "70%" },
         marginInline: "auto",
         marginTop: 15,
+        minHeight: { xs: "80vh", md: "90vh" },
       }}
     >
       <Typography variant="h1">404</Typography>

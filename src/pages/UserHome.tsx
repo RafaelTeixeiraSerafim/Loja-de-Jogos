@@ -146,7 +146,7 @@ export default function UserHome() {
   return (
     <Box
       sx={{
-        width: { xs: "90%", sm: "70%" },
+        width: { xs: "90%", md: "70%" },
         marginInline: "auto",
         display: "flex",
         flexDirection: "column",
@@ -176,7 +176,7 @@ export default function UserHome() {
               display: "flex",
               flexDirection: { xs: "column", md: "row" },
               gap: 3,
-              padding: { xs: 1.5, sm: 3 },
+              padding: { xs: 1.5, sm: 2 },
               marginBottom: 8,
             }}
             elevation={2}

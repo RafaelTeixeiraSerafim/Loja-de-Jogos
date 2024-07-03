@@ -26,6 +26,7 @@ import {
   MenuItem,
   Paper,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -72,6 +73,7 @@ export default function Game() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const { title } = useParams();
+  const theme = useTheme();
 
   const isGameMenuOpen = Boolean(gameMoreAnchorEl);
 
@@ -528,18 +530,18 @@ export default function Game() {
       setScreenWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Clean up event listener on component unmount
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [window.screen.width]);
+  }, []);
 
   return (
     <Box
       sx={{
-        width: { xs: "90%", sm: "70%" },
+        width: { xs: "90%", md: "70%" },
         marginInline: "auto",
         display: "flex",
         flexDirection: "column",
@@ -567,16 +569,16 @@ export default function Game() {
               }}
             >
               {screenWidth < 900 && (
-                  <BuyButton
-                    isBoughtGame={isBoughtGame}
-                    game={game}
-                    handleOnClickBuy={handleOnClickBuy}
-                  />
-                )}
+                <BuyButton
+                  isBoughtGame={isBoughtGame}
+                  game={game}
+                  handleOnClickBuy={handleOnClickBuy}
+                />
+              )}
               <Box
                 sx={{
                   width: { xs: "100%", md: "70%" },
-                  marginTop: {xs: 2, md: 0}
+                  marginTop: { xs: 2, md: 0 },
                 }}
               >
                 <Carousel
@@ -636,7 +638,13 @@ export default function Game() {
                   <Typography>
                     Desenvolvedor:{" "}
                     {developerUser ? (
-                      <Link to={`/partner/${developerUser.username}`}>
+                      <Link
+                        to={`/partner/${developerUser.username}`}
+                        style={{
+                          color: theme.palette.primary.main,
+                          textDecoration: "none",
+                        }}
+                      >
                         {developerUser.username}
                       </Link>
                     ) : (
@@ -646,7 +654,13 @@ export default function Game() {
                   <Typography>
                     Distribuidora:{" "}
                     {publisherUser ? (
-                      <Link to={`/partner/${publisherUser.username}`}>
+                      <Link
+                        to={`/partner/${publisherUser.username}`}
+                        style={{
+                          color: theme.palette.primary.main,
+                          textDecoration: "none",
+                        }}
+                      >
                         {publisherUser.username}
                       </Link>
                     ) : (
