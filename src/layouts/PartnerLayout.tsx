@@ -17,6 +17,7 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import AddIcon from "@mui/icons-material/Add";
 import axiosInstance from "../utils/axiosInstance";
 import { OriginalGame } from "../types/types";
+import PartnerMobileMenu from "../components/PartnerMobileMenu";
 import SearchBar from "../components/SearchBar";
 
 export default function UserLayout() {
@@ -29,7 +30,6 @@ export default function UserLayout() {
   const navigate = useNavigate();
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -42,10 +42,6 @@ export default function UserLayout() {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
   };
 
   function fetchPartnerGames() {
@@ -129,38 +125,6 @@ export default function UserLayout() {
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Perfil</p>
-      </MenuItem>
-    </Menu>
-  );
-
   useEffect(fetchPartnerGames, []);
 
   return (
@@ -208,22 +172,16 @@ export default function UserLayout() {
             </Box>
 
             {/* Mobile Menu */}
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </Box>
+            <PartnerMobileMenu
+              handleMobileMenuClose={handleMobileMenuClose}
+              handleProfileMenuOpen={handleProfileMenuOpen}
+              mobileMoreAnchorEl={mobileMoreAnchorEl}
+              setMobileMoreAnchorEl={setMobileMoreAnchorEl}
+              user={user}
+            />
+            {renderMenu}
           </Toolbar>
         </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
       </Box>
       <Outlet />
     </>
