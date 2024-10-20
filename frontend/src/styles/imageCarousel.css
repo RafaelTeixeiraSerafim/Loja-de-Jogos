@@ -1,0 +1,27 @@
+.carousel-root {
+    width: 100%;
+}
+
+.thumbs-wrapper {
+    margin: 0 !important;
+    width: 100% !important;
+    overflow-x: scroll !important;
+}
+
+.thumbs {
+    margin-block: 0.5rem;
+    padding: 0;
+}
+
+.thumb {
+    border: 2px solid rgba(41, 82, 74, 0) !important;
+    cursor: pointer;
+}
+
+.thumb:hover, .thumb.selected {
+    border: 2px solid #29524A !important;
+}
+
+.carousel img {
+    display: "inherit";
+}
